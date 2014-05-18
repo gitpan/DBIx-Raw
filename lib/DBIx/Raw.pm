@@ -11,6 +11,7 @@ has 'dsn'    => ( is => 'rw', isa => 'Any', default => undef);
 has 'user'    => ( is => 'rw', isa => 'Any', default => undef);
 has 'password'    => ( is => 'rw', isa => 'Any', default => undef);
 has 'conf'    => ( is => 'rw', isa => 'Any', default => undef);
+has 'prev_conf'    => ( is => 'rw', isa => 'Str', default => '');
 has 'crypt_key'    => ( is => 'rw', isa => 'Str', default => '6883868834006296591264051568595813693328016796531185824375212916576042669669556288781800326542091901603033335703884439231366552922364658270813734165084102xfasdfa8823423sfasdfalkj!@#$$CCCFFF!09xxxxlai3847lol13234408!!@#$_+-083dxje380-=0');
 
 has 'crypt'    => ( 
@@ -61,11 +62,11 @@ DBIx::Raw - Maintain control of SQL queries while still having a layer of abstra
 
 =head1 VERSION
 
-Version 0.08
+Version 0.09
 
 =cut
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 =head1 SYNOPSIS
 
@@ -1033,14 +1034,14 @@ For example, if you update C<dsn>, C<user>, C<password>:
     $db->password('password');
 
     #get new dbh but keep same DBIx::Raw object
-	$db->connect;
+    $db->connect;
 
 Or if you update the conf file:
 
     $db->conf('/path/to/new_conf.pl');
     
     #get new dbh but keep same DBIx::Raw object
-	$db->connect;
+    $db->connect;
 
 =cut
 
@@ -1149,6 +1150,10 @@ sub _parse_conf {
 
 	#load in configuration if it exists
 	if($self->conf) { 
+
+		#no need to read in settings again if conf hasn't changed, unless dsn, user, or password is unset
+		return if $self->conf eq $self->prev_conf and $self->dsn and $self->user and $self->password;
+
 		my $config = Config::Any->load_files({files =>[$self->conf],use_ext => 1  }); 
 
 		for my $c (@$config){
@@ -1160,6 +1165,8 @@ sub _parse_conf {
    				}
   			}
 		}
+
+		$self->prev_conf($self->conf);
 	}
 }
 

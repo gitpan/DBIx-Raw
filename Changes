@@ -1,5 +1,8 @@
 Revision history for DBIx-Raw
 
+0.09    May 17, 7:20 PM Seattle, WA 
+        Added prev_conf so we don't reread in conf if it has not changed
+
 0.08    May 17, 7:05 PM Seattle, WA 
         Added documentation for connect
 
