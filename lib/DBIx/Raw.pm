@@ -61,11 +61,11 @@ DBIx::Raw - Maintain control of SQL queries while still having a layer of abstra
 
 =head1 VERSION
 
-Version 0.07
+Version 0.08
 
 =cut
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 =head1 SYNOPSIS
 
@@ -962,9 +962,85 @@ L</dbh> can also be used to set a new database handle for L<DBIx::Raw> to use.
 
 =cut
 
+=head2 dsn
+
+L</dsn> returns the dsn that was provided.
+
+    my $dsn = $db->dsn;
+
+L</dsn> can also be used to set a new C<dsn>.
+
+    $db->dsn($new_dsn);
+
+When setting a new C<dsn>, it's likely you'll want to use L</connect>.
+
+=cut
+
+=head2 user
+
+L</user> returns the user that was provided.
+
+    my $user = $db->user;
+
+L</user> can also be used to set a new C<user>.
+
+    $db->user($new_user);
+
+When setting a new C<user>, it's likely you'll want to use L</connect>.
+
+=cut
+
+=head2 password
+
+L</password> returns the password that was provided.
+
+    my $password = $db->password;
+
+L</password> can also be used to set a new C<password>.
+
+    $db->password($new_password);
+
+When setting a new C<password>, it's likely you'll want to use L</connect>.
+
+=cut
+
+=head2 conf
+
+L</conf> returns the conf file that was provided.
+
+    my $conf = $db->conf;
+
+L</conf> can also be used to set a new C<conf> file.
+
+    $db->conf($new_conf);
+
+When setting a new C<conf>, it's likely you'll want to use L</connect>.
+
+=cut
+
 =head2 connect
 
-L</connect> can be used to keep the same L<DBIx::Raw> object, but get a new L</dbh> if you have changed the connect info.
+L</connect> can be used to keep the same L<DBIx::Raw> object, but get a new L</dbh>. You can call connect to get a new dbh with the same settings that you have provided:
+
+    #now there is a new dbh with the same DBIx::Raw object using the same settings
+    $db->connect;
+
+Or you can change the connect info. 
+For example, if you update C<dsn>, C<user>, C<password>:
+
+    $db->dsn('new_dsn');
+    $db->user('user');
+    $db->password('password');
+
+    #get new dbh but keep same DBIx::Raw object
+	$db->connect;
+
+Or if you update the conf file:
+
+    $db->conf('/path/to/new_conf.pl');
+    
+    #get new dbh but keep same DBIx::Raw object
+	$db->connect;
 
 =cut
 
